@@ -26,7 +26,7 @@ TabContainer.propTypes = {
 const styles = theme => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    // width: 500,
+    width: '100%',
   },
 });
 
@@ -54,7 +54,9 @@ class Home extends Component {
             onChange={this.handleChange}
             indicatorColor="primary"
             textColor="primary"
-            variant="fullWidth"
+            variant={window.innerWidth > 1000 ? 'fullWidth':'scrollable'}
+
+            scrollButtons="auto"
           >
             <Tab label="Daily" />
             <Tab label="Monthly" />
