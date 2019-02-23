@@ -35,7 +35,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <AppBar position="static">
+        <AppBar position="static" style={{textAlign: 'center'}}>
           <Toolbar>
             <Typography variant="h6" color="inherit" className={classes.grow}>
               Day To Day
