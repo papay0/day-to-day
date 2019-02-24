@@ -9,6 +9,7 @@ import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 
 import Daily from "../Daily/Daily";
+import Promo from "../Promo/Promo";
 
 function TabContainer({ children, dir }) {
   return (
@@ -73,7 +74,7 @@ class Home extends Component {
           <TabContainer dir={theme.direction}><Daily/></TabContainer>
           <TabContainer dir={theme.direction}>Monthly</TabContainer>
           <TabContainer dir={theme.direction}>6 Months</TabContainer>
-          <TabContainer dir={theme.direction}>Promo</TabContainer>
+          <TabContainer dir={theme.direction}><Promo/></TabContainer>
           <TabContainer dir={theme.direction}>Standup</TabContainer>
         </SwipeableViews>
       </div>

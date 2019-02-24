@@ -9,7 +9,6 @@ import Divider from "@material-ui/core/Divider";
 import Checkbox from "@material-ui/core/Checkbox";
 
 import ListItem from "@material-ui/core/ListItem";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
 
 const styles = {};
@@ -83,7 +82,7 @@ class DailyCard extends Component {
               <ListItemText primary="Line item 3" />
             </ListItem>
             <ListItem
-              key="1"
+              key="4"
               role={undefined}
               dense
               button
@@ -99,7 +98,7 @@ class DailyCard extends Component {
             </ListItem>
             <div>
               <ListItem
-                key="2"
+                key="5"
                 role={undefined}
                 dense
                 button
@@ -115,54 +114,7 @@ class DailyCard extends Component {
               </ListItem>
             </div>
             <ListItem
-              key="3"
-              role={undefined}
-              dense
-              button
-              style={{ marginLeft: "30px" }}
-              onClick={this.handleChange()}
-            >
-              <Checkbox
-                checked={this.state.checked}
-                tabIndex={-1}
-                disableRipple
-              />
-              <ListItemText primary="Line item 3" />
-            </ListItem>
-            <ListItem
-              key="1"
-              role={undefined}
-              dense
-              button
-              onClick={this.handleChange()}
-            >
-              <Checkbox
-                checked={this.state.checked}
-                tabIndex={-1}
-                disableRipple
-                onChange={this.handleChange()}
-              />
-              <ListItemText primary="Line item 1 this is a super long text, will it bug, will it not, I am not sure but I will see that soon enough!" />
-            </ListItem>
-            <div>
-              <ListItem
-                key="2"
-                role={undefined}
-                dense
-                button
-                style={{ marginLeft: "30px" }}
-                onClick={this.handleChange()}
-              >
-                <Checkbox
-                  checked={this.state.checked}
-                  tabIndex={-1}
-                  disableRipple
-                />
-                <ListItemText primary="Line item 2 a bit long Line item 2 a bit long Line item 2 a bit long " />
-              </ListItem>
-            </div>
-            <ListItem
-              key="3"
+              key="6"
               role={undefined}
               dense
               button
