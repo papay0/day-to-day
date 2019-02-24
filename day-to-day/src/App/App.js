@@ -38,6 +38,7 @@ class App extends Component {
         <AppBar position="static" style={{textAlign: 'center'}}>
           <Toolbar>
             <Typography variant="h6" color="inherit" className={classes.grow}>
+            {user && user.displayName + " - "}
               Day To Day
             </Typography>
             {user &&
