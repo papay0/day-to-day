@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 
-import DailyCard from "./DailyCard";
+import TaskCard from "../PlatformUI/TaskCard";
 
 const styles = {};
 
@@ -15,7 +15,7 @@ class Daily extends Component {
     ];
     return tasks.map(task => {
       return (
-        <DailyCard day={task.day} key={task.day} />
+        <TaskCard day={task.day} key={task.day} />
       );
     });
   }

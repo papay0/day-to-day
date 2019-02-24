@@ -13,7 +13,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 
 const styles = {};
 
-class DailyCard extends Component {
+class TaskCard extends Component {
   state = {
     checked: true
   };
@@ -135,8 +135,8 @@ class DailyCard extends Component {
   }
 }
 
-DailyCard.propTypes = {
+TaskCard.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(DailyCard);
+export default withStyles(styles)(TaskCard);
