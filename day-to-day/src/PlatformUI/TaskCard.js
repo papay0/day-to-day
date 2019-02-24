@@ -24,7 +24,6 @@ class TaskCard extends Component {
 
   render() {
     const { classes, day } = this.props;
-    let checked = true;
     return (
       <div>
         <Card
