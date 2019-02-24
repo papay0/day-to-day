@@ -5,6 +5,10 @@
   padding: 10px 20px;
 }
 
+.CodeMirror {
+  height: 400px;
+}
+
 pre {
   border: 1px solid #ccc;
 }
