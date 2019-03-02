@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 
-import TaskCard from "../PlatformUI/TaskCard";
+import TasksCard from "../PlatformUI/TasksCard";
 
 const styles = {};
 
@@ -17,42 +17,46 @@ class Daily extends Component {
             description: "Create Android Driver app",
             done: false,
             id: "abcd",
-            parentId: null
-          },
-          {
-            type: "subtask",
-            description: "Read about Android architecture",
-            done: true,
-            id: "yeye",
-            parentId: "abcd"
-          },
-          {
-            type: "subtask",
-            description: "Read about Kotlin",
-            done: true,
-            id: "yeyesfd",
-            parentId: "abcd"
-          },
-          {
-            type: "subtask",
-            description: "Install IntelliJ",
-            done: false,
-            id: "fdssfd",
-            parentId: "abcd"
+            parentId: null,
+            children: [
+              {
+                type: "subtask",
+                description: "Read about Android architecture",
+                done: true,
+                id: "yeye",
+                parentId: "abcd"
+              },
+              {
+                type: "subtask",
+                description: "Read about Kotlin",
+                done: true,
+                id: "yeyesfd",
+                parentId: "abcd"
+              },
+              {
+                type: "subtask",
+                description: "Install IntelliJ",
+                done: false,
+                id: "fdssfd",
+                parentId: "abcd"
+              }
+            ]
           },
           {
             type: "task",
             description: "Known issues",
             done: false,
             id: "iiuh",
-            parentId: null
-          },
-          {
-            type: "subtask",
-            description: "Css subtask not well right aligned",
-            done: false,
-            id: "lkjlkj",
-            parentId: "iiuh"
+            parentId: null,
+            children: [
+              {
+                type: "subtask",
+                description: "Css subtask not well right aligned",
+                done: false,
+                id: "lkjlkj",
+                parentId: "iiuh"
+              }
+            ]
           }
         ]
       }
@@ -61,7 +65,7 @@ class Daily extends Component {
 
   render() {
     return this.state.cards.map(card => {
-      return <TaskCard day={card.day} key={card.day} tasks={card.tasks} />;
+      return <TasksCard day={card.day} key={card.day} tasks={card.tasks} />;
     });
   }
 }
