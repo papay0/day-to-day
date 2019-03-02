@@ -27,12 +27,13 @@ class TasksElement extends Component {
   };
 
   handleClick = (taskId, event) => {
-    console.log(taskId)
+    // console.log(taskId)
     this.setState({ ['anchorEl'+taskId]: event.currentTarget });
   };
 
   handleClose = (option, taskId) => {
-    console.log(option)
+    console.log("option: ", option)
+    console.log("taskId: ", taskId)
     this.setState({ ['anchorEl'+taskId]: null });
   };
 
@@ -102,7 +103,13 @@ class TasksElement extends Component {
                         id={"menu"+task.id}
                         anchorEl={anchorEl}
                         open={open}
-                        onClose={this.handleClose}
+                        onClose={() => { this.handleClose('close', task.id) }}
+                        PaperProps={{
+                          style: {
+                            maxHeight: ITEM_HEIGHT * 4.5,
+                            width: 200,
+                          },
+                        }}
                       >
                         {menuOptions.map(option => (
                           <MenuItem
