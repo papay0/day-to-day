@@ -35,6 +35,7 @@ class TasksCard extends Component {
     for (let task of tasks) {
       if (task.id === taskId) {
         task.done = !task.done;
+        task.needsEditFocus = false;
         task.children.map(subtasks => (subtasks.done = task.done));
         continue;
       }
@@ -43,8 +44,10 @@ class TasksCard extends Component {
           subtask.done = !subtask.done;
           if (this.everySubtaskIsDone(task.children)) {
             task.done = true;
+            task.needsEditFocus = false;
           } else {
             task.done = false;
+            task.needsEditFocus = false;
           }
           continue;
         }
@@ -54,17 +57,33 @@ class TasksCard extends Component {
   };
 
   handleAddTaskButton = () => {
-    const newTask = [{
-      type: "task",
-      description: "Add task description here...",
-      done: false,
-      id: "blabalbla",
-      parentId: null,
-      children: [],
-      needsEditFocus: true
-    }];
+    const newTask = [
+      {
+        type: "task",
+        description: "Add task description here...",
+        done: false,
+        id: new Date().getTime(),
+        parentId: null,
+        children: [],
+        needsEditFocus: true
+      }
+    ];
     this.setState({ tasks: newTask.concat(this.state.tasks) });
     console.log("handleAddTaskButton");
+  };
+
+  handleInputChange = (taskId, description) => {
+    console.log(taskId, description);
+
+    const tasks = this.state.tasks.slice();
+
+    for (let task of tasks) {
+      if (task.id === taskId) {
+        task.description = description
+        continue;
+      }
+    }
+    this.setState({ tasks: tasks });
   };
 
   render() {
@@ -102,11 +121,13 @@ class TasksCard extends Component {
             <TasksElement
               tasks={tasksNotDone}
               handleCheckboxClicked={this.handleCheckboxClicked}
+              handleInputChange={this.handleInputChange}
             />
             {tasksDone.length > 0 && tasksNotDone.length > 0 && <Divider />}
             <TasksElement
               tasks={tasksDone}
               handleCheckboxClicked={this.handleCheckboxClicked}
+              handleInputChange={this.handleInputChange}
             />
           </CardContent>
         </Card>
