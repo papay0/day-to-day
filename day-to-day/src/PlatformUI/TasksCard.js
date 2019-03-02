@@ -86,6 +86,10 @@ class TasksCard extends Component {
     this.setState({ tasks: tasks });
   };
 
+  handleKeyPress = (taskId) => {
+    this.handleAddTaskButton()
+  }
+
   render() {
     const { classes, day } = this.props;
     const tasks = this.state.tasks;
@@ -111,6 +115,7 @@ class TasksCard extends Component {
                 aria-label="Add"
                 className={classes.fab}
                 onClick={this.handleAddTaskButton}
+                style={{marginRight: '28px'}}
               >
                 <AddIcon />
               </Fab>
@@ -122,12 +127,14 @@ class TasksCard extends Component {
               tasks={tasksNotDone}
               handleCheckboxClicked={this.handleCheckboxClicked}
               handleInputChange={this.handleInputChange}
+              handleKeyPress={this.handleKeyPress}
             />
             {tasksDone.length > 0 && tasksNotDone.length > 0 && <Divider />}
             <TasksElement
               tasks={tasksDone}
               handleCheckboxClicked={this.handleCheckboxClicked}
               handleInputChange={this.handleInputChange}
+              handleKeyPress={this.handleKeyPress}
             />
           </CardContent>
         </Card>
