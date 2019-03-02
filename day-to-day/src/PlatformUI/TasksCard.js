@@ -23,27 +23,8 @@ class TasksCard extends Component {
   };
 
   updateOrderTasks = tasks => {
-    const tasksNotDone = [];
-    const tasksDone = [];
-
-    for (let task of tasks) {
-      if (task.children.length === 0) {
-        if (task.done) {
-          tasksDone.push(task);
-        } else {
-          tasksNotDone.push(task);
-        }
-        continue;
-      }
-      if (this.everySubtaskIsDone(task.children)) {
-        task.done = true;
-        tasksDone.push(task);
-      } else {
-        task.done = false;
-        tasksNotDone.push(task);
-      }
-    }
-    console.log(tasksNotDone.concat(tasksDone));
+    const tasksNotDone = tasks.filter(task => !task.done)
+    const tasksDone = tasks.filter(task => task.done)
     return tasksNotDone.concat(tasksDone);
   };
 
@@ -54,11 +35,17 @@ class TasksCard extends Component {
     for (let task of tasks) {
       if (task.id === taskId) {
         task.done = !task.done;
+        task.children.map(subtasks => subtasks.done = task.done)
         continue;
       }
       for (let subtask of task.children) {
         if (subtask.id === taskId) {
           subtask.done = !subtask.done;
+          if (this.everySubtaskIsDone(task.children)) {
+            task.done = true;
+          } else {
+            task.done = false;
+          }
           continue;
         }
       }
