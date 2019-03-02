@@ -10,19 +10,26 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 
 import Checkbox from "@material-ui/core/Checkbox";
-
 import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import InputBase from "@material-ui/core/InputBase";
 
 const styles = {};
 
 class TaskCard extends Component {
   state = {
-    checked: true
+    tasks: this.props.tasks
   };
 
-  handleChange = name => event => {
-    this.setState({ checked: !this.state.checked });
+  handleCheckboxClicked = taskId => event => {
+    console.log("Checkbox: ", taskId);
+    const tasks = this.state.tasks.slice();
+
+    for (let task of tasks) {
+      if (task.id === taskId) {
+        task.done = !task.done;
+      }
+    }
+    this.setState({ tasks: tasks });
   };
 
   render() {
@@ -30,7 +37,7 @@ class TaskCard extends Component {
     return (
       <div>
         <Card
-          lassName={classes.card}
+          className={classes.card}
           style={{
             marginTop: "20px",
             marginBottom: "20px",
@@ -60,7 +67,6 @@ class TaskCard extends Component {
                   role={undefined}
                   dense
                   button
-                  onClick={this.handleChange()}
                   style={{
                     marginLeft: task.type === "subtask" ? "30px" : "0px"
                   }}
@@ -69,9 +75,13 @@ class TaskCard extends Component {
                     checked={task.done}
                     tabIndex={-1}
                     disableRipple
-                    onChange={this.handleChange()}
+                    onChange={this.handleCheckboxClicked(task.id)}
                   />
-                  <ListItemText primary={task.description} />
+                  <InputBase
+                    className={classes.margin}
+                    defaultValue={task.description}
+                    fullWidth
+                  />
                 </ListItem>
               );
             })}
