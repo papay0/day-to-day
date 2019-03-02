@@ -57,6 +57,14 @@ class Daily extends Component {
                 parentId: "iiuh"
               }
             ]
+          },
+          {
+            type: "task",
+            description: "Hi",
+            done: false,
+            id: "iiuhfssdfsdfsdf",
+            parentId: null,
+            children: []
           }
         ]
       }

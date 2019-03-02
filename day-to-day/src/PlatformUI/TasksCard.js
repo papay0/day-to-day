@@ -9,10 +9,6 @@ import Divider from "@material-ui/core/Divider";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 
-import Checkbox from "@material-ui/core/Checkbox";
-import ListItem from "@material-ui/core/ListItem";
-import InputBase from "@material-ui/core/InputBase";
-
 import TasksElement from "./TasksElement";
 
 const styles = {};
@@ -22,7 +18,7 @@ class TasksCard extends Component {
     tasks: this.props.tasks
   };
 
-  everySubtasksDone = subtasks => {
+  everySubtaskIsDone = subtasks => {
     return subtasks.every(subtask => subtask.done);
   };
 
@@ -37,9 +33,9 @@ class TasksCard extends Component {
         } else {
           tasksNotDone.push(task);
         }
-        break;
+        continue;
       }
-      if (this.everySubtasksDone(task.children)) {
+      if (this.everySubtaskIsDone(task.children)) {
         task.done = true;
         tasksDone.push(task);
       } else {
@@ -58,12 +54,12 @@ class TasksCard extends Component {
     for (let task of tasks) {
       if (task.id === taskId) {
         task.done = !task.done;
-        break;
+        continue;
       }
       for (let subtask of task.children) {
         if (subtask.id === taskId) {
           subtask.done = !subtask.done;
-          break;
+          continue;
         }
       }
     }
