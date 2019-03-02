@@ -18,27 +18,31 @@ class Daily extends Component {
             done: false,
             id: "abcd",
             parentId: null,
+            needsEditFocus: false,
             children: [
               {
                 type: "subtask",
                 description: "Read about Android architecture",
                 done: true,
                 id: "yeye",
-                parentId: "abcd"
+                parentId: "abcd",
+                needsEditFocus: false,
               },
               {
                 type: "subtask",
                 description: "Read about Kotlin",
                 done: true,
                 id: "yeyesfd",
-                parentId: "abcd"
+                parentId: "abcd",
+                needsEditFocus: false,
               },
               {
                 type: "subtask",
                 description: "Install IntelliJ",
                 done: false,
                 id: "fdssfd",
-                parentId: "abcd"
+                parentId: "abcd",
+                needsEditFocus: false,
               }
             ]
           },
@@ -48,13 +52,15 @@ class Daily extends Component {
             done: false,
             id: "iiuh",
             parentId: null,
+            needsEditFocus: false,
             children: [
               {
                 type: "subtask",
                 description: "Css subtask not well right aligned",
                 done: false,
                 id: "lkjlkj",
-                parentId: "iiuh"
+                parentId: "iiuh",
+                needsEditFocus: false,
               }
             ]
           },
@@ -64,7 +70,8 @@ class Daily extends Component {
             done: false,
             id: "iiuhfssdfsdfsdf",
             parentId: null,
-            children: []
+            children: [],
+            needsEditFocus: false,
           }
         ]
       }

@@ -23,8 +23,8 @@ class TasksCard extends Component {
   };
 
   updateOrderTasks = tasks => {
-    const tasksNotDone = tasks.filter(task => !task.done)
-    const tasksDone = tasks.filter(task => task.done)
+    const tasksNotDone = tasks.filter(task => !task.done);
+    const tasksDone = tasks.filter(task => task.done);
     return tasksNotDone.concat(tasksDone);
   };
 
@@ -35,7 +35,7 @@ class TasksCard extends Component {
     for (let task of tasks) {
       if (task.id === taskId) {
         task.done = !task.done;
-        task.children.map(subtasks => subtasks.done = task.done)
+        task.children.map(subtasks => (subtasks.done = task.done));
         continue;
       }
       for (let subtask of task.children) {
@@ -51,6 +51,20 @@ class TasksCard extends Component {
       }
     }
     this.setState({ tasks: this.updateOrderTasks(tasks) });
+  };
+
+  handleAddTaskButton = () => {
+    const newTask = [{
+      type: "task",
+      description: "Add task description here...",
+      done: false,
+      id: "blabalbla",
+      parentId: null,
+      children: [],
+      needsEditFocus: true
+    }];
+    this.setState({ tasks: newTask.concat(this.state.tasks) });
+    console.log("handleAddTaskButton");
   };
 
   render() {
@@ -77,6 +91,7 @@ class TasksCard extends Component {
                 size="small"
                 aria-label="Add"
                 className={classes.fab}
+                onClick={this.handleAddTaskButton}
               >
                 <AddIcon />
               </Fab>
@@ -84,9 +99,15 @@ class TasksCard extends Component {
           />
           <Divider />
           <CardContent>
-            <TasksElement tasks={tasksNotDone} handleCheckboxClicked={this.handleCheckboxClicked} />
+            <TasksElement
+              tasks={tasksNotDone}
+              handleCheckboxClicked={this.handleCheckboxClicked}
+            />
             {tasksDone.length > 0 && tasksNotDone.length > 0 && <Divider />}
-            <TasksElement tasks={tasksDone} handleCheckboxClicked={this.handleCheckboxClicked} />
+            <TasksElement
+              tasks={tasksDone}
+              handleCheckboxClicked={this.handleCheckboxClicked}
+            />
           </CardContent>
         </Card>
       </div>

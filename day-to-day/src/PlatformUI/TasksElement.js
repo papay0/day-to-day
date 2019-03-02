@@ -5,6 +5,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Checkbox from "@material-ui/core/Checkbox";
 import ListItem from "@material-ui/core/ListItem";
 import InputBase from "@material-ui/core/InputBase";
+import TextField from '@material-ui/core/TextField';
 
 const styles = {};
 
@@ -25,11 +26,21 @@ class TasksElement extends Component {
               disableRipple
               onChange={this.handleCheckboxClicked(task.id)}
             />
-            <InputBase
+            {task.needsEditFocus && (
+              <TextField
+                id="standard-full-width"
+                placeholder={task.description}
+                fullWidth
+                margin="normal"
+              />
+            )}
+            {!task.needsEditFocus && (
+              <InputBase
               className={classes.margin}
               defaultValue={task.description}
               fullWidth
             />
+            )}
           </ListItem>
           {task.children &&
             task.children.map(subtask => {
