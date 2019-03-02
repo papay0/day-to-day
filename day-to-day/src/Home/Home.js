@@ -60,8 +60,6 @@ class Home extends Component {
             scrollButtons="auto"
           >
             <Tab label="Daily" />
-            <Tab label="Monthly" />
-            <Tab label="6 months" />
             <Tab label="Promo" />
             <Tab label="Standup" />
           </Tabs>
@@ -72,8 +70,6 @@ class Home extends Component {
           onChangeIndex={this.handleChangeIndex}
         >
           <TabContainer dir={theme.direction}><Daily/></TabContainer>
-          <TabContainer dir={theme.direction}>Monthly</TabContainer>
-          <TabContainer dir={theme.direction}>6 Months</TabContainer>
           <TabContainer dir={theme.direction}><Promo/></TabContainer>
           <TabContainer dir={theme.direction}>Standup</TabContainer>
         </SwipeableViews>
