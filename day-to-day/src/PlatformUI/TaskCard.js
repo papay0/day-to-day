@@ -6,6 +6,9 @@ import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
 import Divider from "@material-ui/core/Divider";
 
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
+
 import Checkbox from "@material-ui/core/Checkbox";
 
 import ListItem from "@material-ui/core/ListItem";
@@ -23,110 +26,55 @@ class TaskCard extends Component {
   };
 
   render() {
-    const { classes, day } = this.props;
+    const { classes, day, tasks } = this.props;
     return (
       <div>
         <Card
-          className={classes.card}
-          style={{ marginTop: "20px", marginBottom: "20px" }}
+          lassName={classes.card}
+          style={{
+            marginTop: "20px",
+            marginBottom: "20px",
+            marginLeft: "15%",
+            marginRight: "15%"
+          }}
         >
-          <CardHeader title={day} />
+          <CardHeader
+            title={day}
+            action={
+              <Fab
+                color="primary"
+                size="small"
+                aria-label="Add"
+                className={classes.fab}
+              >
+                <AddIcon />
+              </Fab>
+            }
+          />
           <Divider />
           <CardContent>
-            <ListItem
-              key="1"
-              role={undefined}
-              dense
-              button
-              onClick={this.handleChange()}
-            >
-              <Checkbox
-                checked={this.state.checked}
-                tabIndex={-1}
-                disableRipple
-                onChange={this.handleChange()}
-              />
-              <ListItemText primary="Line item 1 this is a super long text, will it bug, will it not, I am not sure but I will see that soon enough!" />
-            </ListItem>
-            <div>
-              <ListItem
-                key="2"
-                role={undefined}
-                dense
-                button
-                style={{ marginLeft: "30px" }}
-                onClick={this.handleChange()}
-              >
-                <Checkbox
-                  checked={this.state.checked}
-                  tabIndex={-1}
-                  disableRipple
-                />
-                <ListItemText primary="Line item 2 a bit long Line item 2 a bit long Line item 2 a bit long " />
-              </ListItem>
-            </div>
-            <ListItem
-              key="3"
-              role={undefined}
-              dense
-              button
-              style={{ marginLeft: "30px" }}
-              onClick={this.handleChange()}
-            >
-              <Checkbox
-                checked={this.state.checked}
-                tabIndex={-1}
-                disableRipple
-              />
-              <ListItemText primary="Line item 3" />
-            </ListItem>
-            <ListItem
-              key="4"
-              role={undefined}
-              dense
-              button
-              onClick={this.handleChange()}
-            >
-              <Checkbox
-                checked={this.state.checked}
-                tabIndex={-1}
-                disableRipple
-                onChange={this.handleChange()}
-              />
-              <ListItemText primary="Line item 1 this is a super long text, will it bug, will it not, I am not sure but I will see that soon enough!" />
-            </ListItem>
-            <div>
-              <ListItem
-                key="5"
-                role={undefined}
-                dense
-                button
-                style={{ marginLeft: "30px" }}
-                onClick={this.handleChange()}
-              >
-                <Checkbox
-                  checked={this.state.checked}
-                  tabIndex={-1}
-                  disableRipple
-                />
-                <ListItemText primary="Line item 2 a bit long Line item 2 a bit long Line item 2 a bit long " />
-              </ListItem>
-            </div>
-            <ListItem
-              key="6"
-              role={undefined}
-              dense
-              button
-              style={{ marginLeft: "30px" }}
-              onClick={this.handleChange()}
-            >
-              <Checkbox
-                checked={this.state.checked}
-                tabIndex={-1}
-                disableRipple
-              />
-              <ListItemText primary="Line item 3" />
-            </ListItem>
+            {tasks.map(task => {
+              return (
+                <ListItem
+                  key={task.id}
+                  role={undefined}
+                  dense
+                  button
+                  onClick={this.handleChange()}
+                  style={{
+                    marginLeft: task.type === "subtask" ? "30px" : "0px"
+                  }}
+                >
+                  <Checkbox
+                    checked={task.done}
+                    tabIndex={-1}
+                    disableRipple
+                    onChange={this.handleChange()}
+                  />
+                  <ListItemText primary={task.description} />
+                </ListItem>
+              );
+            })}
           </CardContent>
         </Card>
       </div>

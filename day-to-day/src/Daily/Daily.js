@@ -8,15 +8,29 @@ const styles = {};
 
 class Daily extends Component {
   render() {
-    const tasks = [
-      { day: "Wednesday 25th February" },
-      { day: "Tuesday 24th February" },
-      { day: "Monday 23th February" }
+    const cards = [
+      {
+        day: "Wednesday 25th February",
+        tasks: [
+          {
+            type: "task",
+            description: "Create Android Driver app",
+            done: false,
+            id: "abcd",
+            parentId: null
+          },
+          {
+            type: "subtask",
+            description: "Read about Android architecture",
+            done: true,
+            id: "yeye",
+            parentId: "abcd"
+          }
+        ]
+      }
     ];
-    return tasks.map(task => {
-      return (
-        <TaskCard day={task.day} key={task.day} />
-      );
+    return cards.map(card => {
+      return <TaskCard day={card.day} key={card.day} tasks={card.tasks} />;
     });
   }
 }
