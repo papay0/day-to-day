@@ -23,22 +23,17 @@ class TasksCard extends Component {
   };
 
   updateOrderTasks = tasks => {
-    const tasksNotDone = tasks.filter(
+    const filteredTasks = tasks.map(task => {
+      const filteredTask = task;
+      filteredTask.children = filteredTask.children.filter(subtask => subtask.description !== "Add task description here...")
+      return filteredTask;
+    });
+    const tasksNotDone = filteredTasks.filter(
       task => !task.done && task.description !== "Add task description here..."
-    ).map(task => {
-      const filteredTask = task;
-      filteredTask.children = filteredTask.children.filter(subtask => subtask.description !== "Add task description here...")
-      return filteredTask;
-    });
-    ;
-    const tasksDone = tasks.filter(
-      task => task.done && task.description !== "Add task description here..." // TODO: Do not include subtask if there is this string
-      // TODO: Make it only once, not duplicate the logic
-    ).map(task => {
-      const filteredTask = task;
-      filteredTask.children = filteredTask.children.filter(subtask => subtask.description !== "Add task description here...")
-      return filteredTask;
-    });
+    );
+    const tasksDone = filteredTasks.filter(
+      task => task.done && task.description !== "Add task description here..."
+    );
     return tasksNotDone.concat(tasksDone);
   };
 
