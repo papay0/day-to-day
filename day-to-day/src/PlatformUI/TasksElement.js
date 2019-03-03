@@ -11,30 +11,29 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const styles = {};
 
-const menuOptions = ["Add subtask", "Delete"];
+const menuOptions = ["Add_subtask", "Delete"];
 
 const ITEM_HEIGHT = 48;
 
 class TasksElement extends Component {
-
   state = {
-    anchorEl: null,
+    anchorEl: null
   };
 
   handleClick = (taskId, event) => {
-    // console.log(taskId)
-    this.setState({ ['anchorEl'+taskId]: event.currentTarget });
+    this.setState({ ["anchorEl" + taskId]: event.currentTarget });
   };
 
   handleClose = (option, taskId) => {
-    console.log("option: ", option)
-    console.log("taskId: ", taskId)
-    this.setState({ ['anchorEl'+taskId]: null });
+    this.setState({ ["anchorEl" + taskId]: null });
+    if (option !== "close") {
+      this.props.tapElementMenu(option, taskId);
+    }
   };
 
   handleCheckboxClicked = taskId => event => {
@@ -54,7 +53,7 @@ class TasksElement extends Component {
   render() {
     const { classes, tasks } = this.props;
     return tasks.map(task => {
-      const anchorElTaskId = 'anchorEl' + task.id;
+      const anchorElTaskId = "anchorEl" + task.id;
       const anchorEl = this.state[anchorElTaskId] || null;
       const open = Boolean(anchorEl);
 
@@ -76,7 +75,7 @@ class TasksElement extends Component {
                   this.handleInputChange(task.id, event);
                 }}
                 onKeyPress={event => {
-                  this.handleKeyPress(task.id, event);
+                  this.handleKeyPress(task.parentId, event);
                 }}
               />
             )}
@@ -95,26 +94,32 @@ class TasksElement extends Component {
                         aria-label="More"
                         aria-owns={open ? "long-menu" : undefined}
                         aria-haspopup="true"
-                        onClick={(e) => { this.handleClick(task.id, e) }}
+                        onClick={e => {
+                          this.handleClick(task.id, e);
+                        }}
                       >
                         <MoreVertIcon />
                       </IconButton>
                       <Menu
-                        id={"menu"+task.id}
+                        id={"menu" + task.id}
                         anchorEl={anchorEl}
                         open={open}
-                        onClose={() => { this.handleClose('close', task.id) }}
+                        onClose={() => {
+                          this.handleClose("close", task.id);
+                        }}
                         PaperProps={{
                           style: {
                             maxHeight: ITEM_HEIGHT * 4.5,
-                            width: 200,
-                          },
+                            width: 200
+                          }
                         }}
                       >
                         {menuOptions.map(option => (
                           <MenuItem
                             key={option}
-                            onClick={() => { this.handleClose(option, task.id) }}
+                            onClick={() => {
+                              this.handleClose(option, task.id);
+                            }}
                           >
                             {option}
                           </MenuItem>
@@ -129,6 +134,7 @@ class TasksElement extends Component {
           {task.children &&
             task.children.map(subtask => {
               return (
+                <div key={subtask.id}>
                 <ListItem
                   key={subtask.id}
                   role={undefined}
@@ -153,7 +159,7 @@ class TasksElement extends Component {
                         this.handleInputChange(subtask.id, event);
                       }}
                       onKeyPress={event => {
-                        this.handleKeyPress(subtask.id, event);
+                        this.handleKeyPress(subtask.parentId, event);
                       }}
                     />
                   )}
@@ -167,7 +173,8 @@ class TasksElement extends Component {
                       }}
                     />
                   )}
-                </ListItem>
+                  </ListItem>
+                  </div>
               );
             })}
         </div>

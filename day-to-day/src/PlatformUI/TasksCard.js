@@ -29,7 +29,6 @@ class TasksCard extends Component {
   };
 
   handleCheckboxClicked = taskId => {
-    console.log("Checkbox: ", taskId);
     const tasks = this.state.tasks.slice();
 
     for (let task of tasks) {
@@ -56,39 +55,65 @@ class TasksCard extends Component {
     this.setState({ tasks: this.updateOrderTasks(tasks) });
   };
 
-  handleAddTaskButton = () => {
-    const newTask = [
-      {
-        type: "task",
-        description: "Add task description here...",
-        done: false,
-        id: new Date().getTime(),
-        parentId: null,
-        children: [],
-        needsEditFocus: true
-      }
-    ];
-    this.setState({ tasks: newTask.concat(this.state.tasks) });
-    console.log("handleAddTaskButton");
+  createNewTask = parentId => {
+    return {
+      type: "task",
+      description: "Add task description here...",
+      done: false,
+      id: new Date().getTime(),
+      parentId: parentId,
+      children: [],
+      needsEditFocus: true
+    };
   };
 
-  handleInputChange = (taskId, description) => {
-    console.log(taskId, description);
+  addNewTask = () => {
+    const newTask = this.createNewTask(null);
+    this.setState({ tasks: [newTask].concat(this.state.tasks) });
+  };
 
+  addNewSubtask = (parentId) => {
+    const newTask = this.createNewTask(parentId);
+    const tasks = this.state.tasks.slice();
+
+    for (let task of tasks) {
+      if (task.id === parentId) {
+        task.children.push(newTask);
+        continue;
+      }
+    }
+    this.setState({ tasks: tasks });
+  }
+
+  handleInputChange = (taskId, description) => {
     const tasks = this.state.tasks.slice();
 
     for (let task of tasks) {
       if (task.id === taskId) {
-        task.description = description
+        task.description = description;
         continue;
       }
     }
     this.setState({ tasks: tasks });
   };
 
-  handleKeyPress = (taskId) => {
-    this.handleAddTaskButton()
+  handleKeyPress = taskId => {
+    this.addNewElement(taskId);
+  };
+
+  addNewElement = (parentId) => { // if parentId null: add new one, otherwise add subtask
+    if (parentId === null) {
+      this.addNewTask();
+    } else {
+      this.addNewSubtask(parentId);
+    }
   }
+
+  tapElementMenu = (option, taskId) => {
+    if (option === 'Add_subtask') {
+      this.addNewSubtask(taskId);
+    }
+  };
 
   render() {
     const { classes, day } = this.props;
@@ -114,8 +139,8 @@ class TasksCard extends Component {
                 size="small"
                 aria-label="Add"
                 className={classes.fab}
-                onClick={this.handleAddTaskButton}
-                style={{marginRight: '28px'}}
+                onClick={this.addNewTask}
+                style={{ marginRight: "28px" }}
               >
                 <AddIcon />
               </Fab>
@@ -128,6 +153,7 @@ class TasksCard extends Component {
               handleCheckboxClicked={this.handleCheckboxClicked}
               handleInputChange={this.handleInputChange}
               handleKeyPress={this.handleKeyPress}
+              tapElementMenu={this.tapElementMenu}
             />
             {tasksDone.length > 0 && tasksNotDone.length > 0 && <Divider />}
             <TasksElement
@@ -135,6 +161,7 @@ class TasksCard extends Component {
               handleCheckboxClicked={this.handleCheckboxClicked}
               handleInputChange={this.handleInputChange}
               handleKeyPress={this.handleKeyPress}
+              tapElementMenu={this.tapElementMenu}
             />
           </CardContent>
         </Card>
