@@ -41,6 +41,7 @@ class TasksCard extends Component {
       for (let subtask of task.children) {
         if (subtask.id === taskId) {
           subtask.done = !subtask.done;
+          subtask.needsEditFocus = false;
           if (this.everySubtaskIsDone(task.children)) {
             task.done = true;
             task.needsEditFocus = false;
@@ -92,6 +93,12 @@ class TasksCard extends Component {
       if (task.id === taskId) {
         task.description = description;
         continue;
+      }
+      for (let subtask of task.children) {
+        if (subtask.id === taskId) {
+          subtask.description = description;
+          continue;
+        }
       }
     }
     this.setState({ tasks: tasks });
