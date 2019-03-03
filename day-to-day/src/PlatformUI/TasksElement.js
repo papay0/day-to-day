@@ -65,6 +65,7 @@ class TasksElement extends Component {
               tabIndex={-1}
               disableRipple
               onChange={this.handleCheckboxClicked(task.id)}
+              disabled={task.description === 'Add task description here...'}
             />
             {task.needsEditFocus && (
               <InputBase
@@ -190,6 +191,7 @@ class TasksElement extends Component {
                     tabIndex={-1}
                     disableRipple
                     onChange={this.handleCheckboxClicked(subtask.id)}
+                    disabled={subtask.description === 'Add task description here...'}
                   />
                   {subtask.needsEditFocus && (
                     <InputBase

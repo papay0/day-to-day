@@ -23,8 +23,22 @@ class TasksCard extends Component {
   };
 
   updateOrderTasks = tasks => {
-    const tasksNotDone = tasks.filter(task => !task.done);
-    const tasksDone = tasks.filter(task => task.done);
+    const tasksNotDone = tasks.filter(
+      task => !task.done && task.description !== "Add task description here..."
+    ).map(task => {
+      const filteredTask = task;
+      filteredTask.children = filteredTask.children.filter(subtask => subtask.description !== "Add task description here...")
+      return filteredTask;
+    });
+    ;
+    const tasksDone = tasks.filter(
+      task => task.done && task.description !== "Add task description here..." // TODO: Do not include subtask if there is this string
+      // TODO: Make it only once, not duplicate the logic
+    ).map(task => {
+      const filteredTask = task;
+      filteredTask.children = filteredTask.children.filter(subtask => subtask.description !== "Add task description here...")
+      return filteredTask;
+    });
     return tasksNotDone.concat(tasksDone);
   };
 
@@ -72,7 +86,7 @@ class TasksCard extends Component {
     this.setState({ tasks: [newTask].concat(this.state.tasks) });
   };
 
-  addNewSubtask = (parentId) => {
+  addNewSubtask = parentId => {
     const newTask = this.createNewTask(parentId);
     const tasks = this.state.tasks.slice();
 
@@ -83,7 +97,7 @@ class TasksCard extends Component {
       }
     }
     this.setState({ tasks: tasks });
-  }
+  };
 
   handleInputChange = (taskId, description) => {
     const tasks = this.state.tasks.slice();
@@ -107,16 +121,17 @@ class TasksCard extends Component {
     this.addNewElement(taskId);
   };
 
-  addNewElement = (parentId) => { // if parentId null: add new one, otherwise add subtask
+  addNewElement = parentId => {
+    // if parentId null: add new one, otherwise add subtask
     if (parentId === null) {
       this.addNewTask();
     } else {
       this.addNewSubtask(parentId);
     }
-  }
+  };
 
   tapElementMenu = (option, taskId) => {
-    if (option === 'Add_subtask') {
+    if (option === "Add_subtask") {
       this.addNewSubtask(taskId);
     }
   };
