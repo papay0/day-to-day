@@ -125,9 +125,16 @@ class TasksCard extends Component {
     }
   };
 
+  deleteTask = (taskId) => {
+    const tasks = this.state.tasks.filter(task => task.id !== taskId);
+    this.setState({ tasks: tasks });
+  }
+
   tapElementMenu = (option, taskId) => {
-    if (option === "Add_subtask") {
+    if (option === "Add subtask") {
       this.addNewSubtask(taskId);
+    } else if (option === "Delete") {
+      this.deleteTask(taskId);
     }
   };
 

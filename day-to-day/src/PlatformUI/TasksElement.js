@@ -16,7 +16,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 
 const styles = {};
 
-const menuOptions = ["Add_subtask", "Delete"];
+const menuOptions = ["Add subtask", "Delete"];
 
 const ITEM_HEIGHT = 48;
 
