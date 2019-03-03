@@ -130,6 +130,15 @@ class TasksCard extends Component {
     this.setState({ tasks: tasks });
   }
 
+  deleteSubtask = (subtaskId) => {
+    const tasks = this.state.tasks.map(task => {
+      const filteredTask = task;
+      filteredTask.children = filteredTask.children.filter(subtask => subtask.id !== subtaskId)
+      return filteredTask;
+    });
+    this.setState({ tasks: tasks });
+  }
+
   tapElementMenu = (option, taskId) => {
     if (option === "Add subtask") {
       this.addNewSubtask(taskId);
@@ -177,6 +186,7 @@ class TasksCard extends Component {
               handleInputChange={this.handleInputChange}
               handleKeyPress={this.handleKeyPress}
               tapElementMenu={this.tapElementMenu}
+              deleteSubtask={this.deleteSubtask}
             />
             {tasksDone.length > 0 && tasksNotDone.length > 0 && <Divider />}
             <TasksElement
@@ -185,6 +195,7 @@ class TasksCard extends Component {
               handleInputChange={this.handleInputChange}
               handleKeyPress={this.handleKeyPress}
               tapElementMenu={this.tapElementMenu}
+              deleteSubtask={this.deleteSubtask}
             />
           </CardContent>
         </Card>

@@ -14,6 +14,8 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 
+import DeleteIcon from "@material-ui/icons/Delete";
+
 const styles = {};
 
 const menuOptions = ["Add subtask", "Delete"];
@@ -22,7 +24,7 @@ const ITEM_HEIGHT = 48;
 
 class TasksElement extends Component {
   state = {
-    anchorEl: null
+    deleteIconHidden: {}
   };
 
   handleClick = (taskId, event) => {
@@ -36,6 +38,10 @@ class TasksElement extends Component {
     }
   };
 
+  deleteSubtask = (subtaskId) => {
+    this.props.deleteSubtask(subtaskId);
+  }
+
   handleCheckboxClicked = taskId => event => {
     this.props.handleCheckboxClicked(taskId);
   };
@@ -48,6 +54,14 @@ class TasksElement extends Component {
     if (event.key === "Enter") {
       this.props.handleKeyPress(taskId);
     }
+  };
+
+  onMouseEnter = subtaskId => {
+    this.setState({ ["subtaskDeleteIconVisible" + subtaskId]: true });
+  };
+
+  onMouseLeave = subtaskId => {
+    this.setState({ ["subtaskDeleteIconVisible" + subtaskId]: false });
   };
 
   render() {
@@ -65,7 +79,7 @@ class TasksElement extends Component {
               tabIndex={-1}
               disableRipple
               onChange={this.handleCheckboxClicked(task.id)}
-              disabled={task.description === 'Add task description here...'}
+              disabled={task.description === "Add task description here..."}
             />
             {task.needsEditFocus && (
               <InputBase
@@ -175,49 +189,68 @@ class TasksElement extends Component {
           </ListItem>
           {task.children &&
             task.children.map(subtask => {
+              let deleteIconVisible = this.state[
+                "subtaskDeleteIconVisible" + subtask.id
+              ];
               return (
                 <div key={subtask.id}>
-                <ListItem
-                  key={subtask.id}
-                  role={undefined}
-                  dense
-                  button
-                  style={{
-                    marginLeft: "30px"
-                  }}
-                >
-                  <Checkbox
-                    checked={subtask.done}
-                    tabIndex={-1}
-                    disableRipple
-                    onChange={this.handleCheckboxClicked(subtask.id)}
-                    disabled={subtask.description === 'Add task description here...'}
-                  />
-                  {subtask.needsEditFocus && (
-                    <InputBase
-                      className={classes.margin}
-                      placeholder={subtask.description}
-                      fullWidth
-                      onChange={event => {
-                        this.handleInputChange(subtask.id, event);
-                      }}
-                      onKeyPress={event => {
-                        this.handleKeyPress(subtask.parentId, event);
-                      }}
+                  <ListItem
+                    key={subtask.id}
+                    role={undefined}
+                    dense
+                    button
+                    style={{
+                      marginLeft: "30px"
+                    }}
+                    onMouseEnter={() => {
+                      this.onMouseEnter(subtask.id);
+                    }}
+                    onMouseLeave={() => {
+                      this.onMouseLeave(subtask.id);
+                    }}
+                  >
+                    <Checkbox
+                      checked={subtask.done}
+                      tabIndex={-1}
+                      disableRipple
+                      onChange={this.handleCheckboxClicked(subtask.id)}
+                      disabled={
+                        subtask.description === "Add task description here..."
+                      }
                     />
-                  )}
-                  {!subtask.needsEditFocus && (
-                    <InputBase
-                      className={classes.margin}
-                      defaultValue={subtask.description}
-                      fullWidth
-                      onChange={event => {
-                        this.handleInputChange(subtask.id, event);
-                      }}
-                    />
-                  )}
+                    {subtask.needsEditFocus && (
+                      <InputBase
+                        className={classes.margin}
+                        placeholder={subtask.description}
+                        fullWidth
+                        onChange={event => {
+                          this.handleInputChange(subtask.id, event);
+                        }}
+                        onKeyPress={event => {
+                          this.handleKeyPress(subtask.parentId, event);
+                        }}
+                      />
+                    )}
+                    {!subtask.needsEditFocus && (
+                      <InputBase
+                        className={classes.margin}
+                        defaultValue={subtask.description}
+                        fullWidth
+                        onChange={event => {
+                          this.handleInputChange(subtask.id, event);
+                        }}
+                      />
+                    )}
+                    <IconButton
+                      aria-label="Delete"
+                      hidden={!deleteIconVisible}
+                      onClick={() => { this.deleteSubtask(subtask.id) }}
+                      style={{marginRight: "30px"}}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
                   </ListItem>
-                  </div>
+                </div>
               );
             })}
         </div>
