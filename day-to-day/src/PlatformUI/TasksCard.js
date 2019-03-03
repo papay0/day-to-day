@@ -36,12 +36,11 @@ class TasksCard extends Component {
         task.done = !task.done;
         task.needsEditFocus = false;
         task.children.map(subtasks => (subtasks.done = task.done));
-        continue;
       }
       for (let subtask of task.children) {
+        subtask.needsEditFocus = false;
         if (subtask.id === taskId) {
           subtask.done = !subtask.done;
-          subtask.needsEditFocus = false;
           if (this.everySubtaskIsDone(task.children)) {
             task.done = true;
             task.needsEditFocus = false;

@@ -77,6 +77,47 @@ class TasksElement extends Component {
                 onKeyPress={event => {
                   this.handleKeyPress(task.parentId, event);
                 }}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <div key={task.id}>
+                      <IconButton
+                        aria-label="More"
+                        aria-owns={open ? "long-menu" : undefined}
+                        aria-haspopup="true"
+                        onClick={e => {
+                          this.handleClick(task.id, e);
+                        }}
+                      >
+                        <MoreVertIcon />
+                      </IconButton>
+                      <Menu
+                        id={"menu" + task.id}
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={() => {
+                          this.handleClose("close", task.id);
+                        }}
+                        PaperProps={{
+                          style: {
+                            maxHeight: ITEM_HEIGHT * 4.5,
+                            width: 200
+                          }
+                        }}
+                      >
+                        {menuOptions.map(option => (
+                          <MenuItem
+                            key={option}
+                            onClick={() => {
+                              this.handleClose(option, task.id);
+                            }}
+                          >
+                            {option}
+                          </MenuItem>
+                        ))}
+                      </Menu>
+                    </div>
+                  </InputAdornment>
+                }
               />
             )}
             {!task.needsEditFocus && (
