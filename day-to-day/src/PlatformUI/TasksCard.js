@@ -18,6 +18,10 @@ class TasksCard extends Component {
     tasks: this.props.tasks
   };
 
+  saveTasks = (tasks) => {
+    this.setState({ tasks: tasks });
+  }
+
   everySubtaskIsDone = subtasks => {
     return subtasks.every(subtask => subtask.done);
   };
@@ -61,7 +65,7 @@ class TasksCard extends Component {
         }
       }
     }
-    this.setState({ tasks: this.updateOrderTasks(tasks) });
+    this.saveTasks(this.updateOrderTasks(tasks));
   };
 
   createNewTask = parentId => {
@@ -78,7 +82,7 @@ class TasksCard extends Component {
 
   addNewTask = () => {
     const newTask = this.createNewTask(null);
-    this.setState({ tasks: [newTask].concat(this.state.tasks) });
+    this.saveTasks([newTask].concat(this.state.tasks));
   };
 
   addNewSubtask = parentId => {
@@ -91,7 +95,7 @@ class TasksCard extends Component {
         continue;
       }
     }
-    this.setState({ tasks: tasks });
+    this.saveTasks(tasks);
   };
 
   handleInputChange = (taskId, description) => {
@@ -109,7 +113,7 @@ class TasksCard extends Component {
         }
       }
     }
-    this.setState({ tasks: tasks });
+    this.saveTasks(tasks);
   };
 
   handleKeyPress = taskId => {
@@ -127,7 +131,7 @@ class TasksCard extends Component {
 
   deleteTask = (taskId) => {
     const tasks = this.state.tasks.filter(task => task.id !== taskId);
-    this.setState({ tasks: tasks });
+    this.saveTasks(tasks);
   }
 
   deleteSubtask = (subtaskId) => {
@@ -136,7 +140,7 @@ class TasksCard extends Component {
       filteredTask.children = filteredTask.children.filter(subtask => subtask.id !== subtaskId)
       return filteredTask;
     });
-    this.setState({ tasks: tasks });
+    this.saveTasks(tasks);
   }
 
   tapElementMenu = (option, taskId) => {
