@@ -46,7 +46,7 @@ class Home extends Component {
   };
 
   render() {
-    const { classes, theme } = this.props;
+    const { classes, theme, email } = this.props;
     return (
       <div className={classes.root}>
         <AppBar position="static" color="default">
@@ -70,7 +70,7 @@ class Home extends Component {
           onChangeIndex={this.handleChangeIndex}
         >
           <TabContainer dir={theme.direction}><Daily/></TabContainer>
-          <TabContainer dir={theme.direction}><Promo/></TabContainer>
+          <TabContainer dir={theme.direction}><Promo email={email}/></TabContainer>
           <TabContainer dir={theme.direction}>Standup</TabContainer>
         </SwipeableViews>
       </div>

@@ -51,7 +51,7 @@ class App extends Component {
             </Toolbar>
           </AppBar>
           {user ? (
-            <LoggedIn displayName={user.displayName} signOut={signOut} />
+            <LoggedIn displayName={user.displayName} email={user.email} signOut={signOut} />
           ) : (
             <LoggedOut signInWithGoogle={signInWithGoogle} />
           )}
