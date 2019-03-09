@@ -1,9 +1,11 @@
 import React from "react";
+import ReactDOM from 'react-dom';
 import Editor from "./editor";
 import Markdown from "react-markdown";
 import CodeBlock from "./code-block";
 import axios from "axios";
 import { debounce } from "lodash";
+import { HotKeys } from "react-hotkeys";
 
 import "./Promo.css";
 
@@ -22,6 +24,14 @@ const initialSource = `
 
 ## Creating Efficiency
 `;
+
+const keyMap = {
+  SAVE: "command+s"
+};
+
+const handlers = {
+  SAVE: event => console.log("Save content!")
+};
 
 export default class Promo extends React.PureComponent {
   constructor(props) {
@@ -54,13 +64,20 @@ export default class Promo extends React.PureComponent {
         }
       }
     );
-  }, 100);
+  }, 500);
 
   handleMarkdownChange(evt) {
     this.save(evt.target.value);
   }
 
   componentDidMount() {
+    const that = this;
+    ReactDOM.findDOMNode(this).addEventListener("keydown", function (e) {
+      if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+        e.preventDefault();
+        that.savePromoContent(that.state.markdownSrc);
+      }
+    }, false);
     axios
       .get(
         "https://us-central1-daytoday-app.cloudfunctions.net/API/promo",
@@ -83,23 +100,25 @@ export default class Promo extends React.PureComponent {
 
   render() {
     return (
-      <div className="promo">
-        <div className="editor-pane">
-          <Editor
-            value={this.state.markdownSrc}
-            onChange={this.handleMarkdownChange}
-          />
+      <HotKeys keyMap={keyMap} handlers={handlers}>
+        <div className="promo">
+          <div className="editor-pane">
+            <Editor
+              value={this.state.markdownSrc}
+              onChange={this.handleMarkdownChange}
+            />
+          </div>
+          <div className="result-pane">
+            <Markdown
+              className="result"
+              source={this.state.markdownSrc}
+              skipHtml={this.state.htmlMode === "skip"}
+              escapeHtml={this.state.htmlMode === "escape"}
+              renderers={{ code: CodeBlock }}
+            />
+          </div>
         </div>
-        <div className="result-pane">
-          <Markdown
-            className="result"
-            source={this.state.markdownSrc}
-            skipHtml={this.state.htmlMode === "skip"}
-            escapeHtml={this.state.htmlMode === "escape"}
-            renderers={{ code: CodeBlock }}
-          />
-        </div>
-      </div>
+      </HotKeys>
     );
   }
 }
