@@ -34,14 +34,16 @@ const styles = theme => ({
 class Home extends Component {
 
   state = {
-    value: 0,
+    value: parseInt(localStorage.getItem("tabIndex")) || 0,
   };
 
   handleChange = (event, value) => {
+    localStorage.setItem("tabIndex", value);
     this.setState({ value });
   };
 
   handleChangeIndex = index => {
+    localStorage.setItem("tabIndex", index);
     this.setState({ value: index });
   };
 
@@ -59,9 +61,9 @@ class Home extends Component {
 
             scrollButtons="auto"
           >
-            <Tab label="Daily" />
-            <Tab label="Promo" />
-            <Tab label="Standup" />
+            <Tab label="Daily" value={0} />
+            <Tab label="Promo" value={1} />
+            <Tab label="Standup" value={2} />
           </Tabs>
         </AppBar>
         <SwipeableViews
