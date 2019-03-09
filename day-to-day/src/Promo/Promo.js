@@ -73,7 +73,7 @@ export default class Promo extends React.PureComponent {
   componentDidMount() {
     const that = this;
     ReactDOM.findDOMNode(this).addEventListener("keydown", function (e) {
-      if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+      if (e.keyCode === 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
         e.preventDefault();
         that.savePromoContent(that.state.markdownSrc);
       }
