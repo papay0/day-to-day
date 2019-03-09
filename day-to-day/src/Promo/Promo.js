@@ -10,15 +10,17 @@ import "./Promo.css";
 const initialSource = `
 # Promo 2019
 
+## Citizenship
+
 ## Software Engineering
 
-- [x]  Cmd+C
-- [ ]  Cmd+V
+## Design and Architecture
 
-## Design & Architecture
+## Execution and Results
 
-- [x]  Design Uber under 1 hour
-- [ ]  What is MVC?
+## Collaboration
+
+## Creating Efficiency
 `;
 
 export default class Promo extends React.PureComponent {
@@ -52,7 +54,7 @@ export default class Promo extends React.PureComponent {
         }
       }
     );
-  }, 500);
+  }, 100);
 
   handleMarkdownChange(evt) {
     this.save(evt.target.value);
