@@ -36,7 +36,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <BrowserView>
+        <BrowserView style={{height: "100%"}}>
           <AppBar position="static" style={{ textAlign: "center" }}>
             <Toolbar>
               <Typography variant="h6" color="inherit" className={classes.grow}>
