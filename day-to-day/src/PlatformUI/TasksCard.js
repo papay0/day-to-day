@@ -10,7 +10,7 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 
 import TasksElement from "./TasksElement";
-import { formatDate } from "../Utils/Date";
+import { getClearDate } from "../Utils/Date";
 
 const styles = {};
 
@@ -21,7 +21,9 @@ class TasksCard extends Component {
   };
 
   saveTasks = tasks => {
+    console.log("IN SAVE TASKS, tasks = " + JSON.stringify(tasks))
     this.setState({ tasks: tasks });
+    // console.log("1. " + JSON.stringify(tasks));
     this.saveOnDatabase(this.props.id, tasks);
   };
 
@@ -77,6 +79,29 @@ class TasksCard extends Component {
     this.saveTasks(this.updateOrderTasks(tasks));
   };
 
+  componentWillReceiveProps(nextProps) {
+    console.log("1. nextProps " + JSON.stringify(nextProps));
+  }
+
+
+  handleInputChange = (taskId, description) => {
+    const tasks = this.state.tasks.slice();
+
+    for (let task of tasks) {
+      if (task.id === taskId) {
+        task.description = description;
+        continue;
+      }
+      for (let subtask of task.children) {
+        if (subtask.id === taskId) {
+          subtask.description = description;
+          continue;
+        }
+      }
+    }
+    this.saveTasks(tasks);
+  };
+
   createNewTask = parentId => {
     return {
       type: "task",
@@ -102,24 +127,6 @@ class TasksCard extends Component {
       if (task.id === parentId) {
         task.children.push(newTask);
         continue;
-      }
-    }
-    this.saveTasks(tasks);
-  };
-
-  handleInputChange = (taskId, description) => {
-    const tasks = this.state.tasks.slice();
-
-    for (let task of tasks) {
-      if (task.id === taskId) {
-        task.description = description;
-        continue;
-      }
-      for (let subtask of task.children) {
-        if (subtask.id === taskId) {
-          subtask.description = description;
-          continue;
-        }
       }
     }
     this.saveTasks(tasks);
@@ -163,8 +170,7 @@ class TasksCard extends Component {
   };
 
   render() {
-    const { classes, day, id } = this.props;
-    console.log("id = " + id);
+    const { classes, day } = this.props;
     const tasks = this.state.tasks;
     const tasksDone = tasks.filter(task => task.done);
     const tasksNotDone = tasks.filter(task => !task.done);
@@ -180,7 +186,7 @@ class TasksCard extends Component {
           }}
         >
           <CardHeader
-            title={formatDate(day)}
+            title={getClearDate(day)}
             action={
               <Fab
                 color="primary"

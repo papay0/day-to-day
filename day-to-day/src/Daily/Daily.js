@@ -5,31 +5,55 @@ import { withStyles } from "@material-ui/core/styles";
 import TasksCard from "../PlatformUI/TasksCard";
 import axios from "axios";
 
-
 const styles = {};
 
 class Daily extends Component {
   state = {
     email: this.props.email,
-    cards: [
-    ]
+    cards: []
   };
 
-  saveTasksDatabase(cardId, tasks, date, email) {
-    axios.post(
-      "https://us-central1-daytoday-app.cloudfunctions.net/API/tasks",
-      {
-        email: email,
-        card: { date: date, tasks: tasks },
-        id: cardId
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
+  saveTasksDatabase = (cardId, tasks, date, email) => {
+    const cleanedTasks = this.prepareForSaving(tasks);
+    axios
+      .post(
+        "https://us-central1-daytoday-app.cloudfunctions.net/API/tasks",
+        {
+          email: email,
+          card: { date: date, tasks: cleanedTasks },
+          id: cardId
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+          }
         }
+      )
+      .then(res => {
+        // console.log("res posts = " + JSON.stringify(res))
+      });
+  };
+
+  prepareForSaving(tasksToSave) {
+    const tasks = JSON.parse(JSON.stringify(tasksToSave));
+    const filteredTasks = tasks
+      .filter(task => task.description !== "Add task description here...")
+      .map(task => {
+        const filteredTask = task;
+        filteredTask.children = filteredTask.children.filter(
+          subtask => subtask.description !== "Add task description here..."
+        );
+        return filteredTask;
+      });
+    for (let task of filteredTasks) {
+      task.needsEditFocus = false;
+      for (let subtask of task.children) {
+        subtask.needsEditFocus = false;
       }
-    );
+    }
+
+    return filteredTasks;
   }
 
   componentDidMount() {
@@ -55,14 +79,28 @@ class Daily extends Component {
   }
 
   prepareUIData(cardsArray) {
-    return cardsArray.sort((card1, card2) => card2.tasks.date - card1.tasks.date)
+    return cardsArray.sort(
+      (card1, card2) => card2.tasks.date - card1.tasks.date
+    );
   }
 
   render() {
     const sortedCards = this.prepareUIData(this.state.cards);
     return sortedCards.map(card => {
       const date = card.tasks.date;
-      return <TasksCard day={date} key={card.id} tasks={card.tasks.tasks} id={card.id} email={this.props.email} saveTasksDatabase={this.saveTasksDatabase} />;
+      return (
+        <TasksCard
+          day={date}
+          key={card.id}
+          tasks={card.tasks.tasks}
+          id={card.id}
+          email={this.props.email}
+          // saveTasksDatabase={this.saveTasksDatabase}
+          saveTasksDatabase={(cardId, tasks, date, email) =>
+            this.saveTasksDatabase(cardId, tasks, date, email)
+          }
+        />
+      );
     });
   }
 }
@@ -74,68 +112,68 @@ Daily.propTypes = {
 export default withStyles(styles)(Daily);
 
 // {
-      //   day: "Wednesday 25th February",
-      //   tasks: [
-      //     {
-      //       type: "task",
-      //       description: "Create Android Driver app",
-      //       done: false,
-      //       id: "abcd",
-      //       parentId: null,
-      //       needsEditFocus: false,
-      //       children: [
-      //         {
-      //           type: "subtask",
-      //           description: "Read about Android architecture",
-      //           done: true,
-      //           id: "yeye",
-      //           parentId: "abcd",
-      //           needsEditFocus: false,
-      //         },
-      //         {
-      //           type: "subtask",
-      //           description: "Read about Kotlin",
-      //           done: true,
-      //           id: "yeyesfd",
-      //           parentId: "abcd",
-      //           needsEditFocus: false,
-      //         },
-      //         {
-      //           type: "subtask",
-      //           description: "Install IntelliJ",
-      //           done: false,
-      //           id: "fdssfd",
-      //           parentId: "abcd",
-      //           needsEditFocus: false,
-      //         }
-      //       ]
-      //     },
-      //     {
-      //       type: "task",
-      //       description: "Known issues",
-      //       done: false,
-      //       id: "iiuh",
-      //       parentId: null,
-      //       needsEditFocus: false,
-      //       children: [
-      //         {
-      //           type: "subtask",
-      //           description: "Css subtask not well right aligned",
-      //           done: false,
-      //           id: "lkjlkj",
-      //           parentId: "iiuh",
-      //           needsEditFocus: false,
-      //         }
-      //       ]
-      //     },
-      //     {
-      //       type: "task",
-      //       description: "Hi",
-      //       done: false,
-      //       id: "iiuhfssdfsdfsdf",
-      //       parentId: null,
-      //       children: [],
-      //       needsEditFocus: false,
-      //     }
-      //   ]
-      // }
+//   day: "Wednesday 25th February",
+//   tasks: [
+//     {
+//       type: "task",
+//       description: "Create Android Driver app",
+//       done: false,
+//       id: "abcd",
+//       parentId: null,
+//       needsEditFocus: false,
+//       children: [
+//         {
+//           type: "subtask",
+//           description: "Read about Android architecture",
+//           done: true,
+//           id: "yeye",
+//           parentId: "abcd",
+//           needsEditFocus: false,
+//         },
+//         {
+//           type: "subtask",
+//           description: "Read about Kotlin",
+//           done: true,
+//           id: "yeyesfd",
+//           parentId: "abcd",
+//           needsEditFocus: false,
+//         },
+//         {
+//           type: "subtask",
+//           description: "Install IntelliJ",
+//           done: false,
+//           id: "fdssfd",
+//           parentId: "abcd",
+//           needsEditFocus: false,
+//         }
+//       ]
+//     },
+//     {
+//       type: "task",
+//       description: "Known issues",
+//       done: false,
+//       id: "iiuh",
+//       parentId: null,
+//       needsEditFocus: false,
+//       children: [
+//         {
+//           type: "subtask",
+//           description: "Css subtask not well right aligned",
+//           done: false,
+//           id: "lkjlkj",
+//           parentId: "iiuh",
+//           needsEditFocus: false,
+//         }
+//       ]
+//     },
+//     {
+//       type: "task",
+//       description: "Hi",
+//       done: false,
+//       id: "iiuhfssdfsdfsdf",
+//       parentId: null,
+//       children: [],
+//       needsEditFocus: false,
+//     }
+//   ]
+// }
