@@ -71,7 +71,7 @@ class Home extends Component {
           index={this.state.value}
           onChangeIndex={this.handleChangeIndex}
         >
-          <TabContainer dir={theme.direction}><Daily/></TabContainer>
+          <TabContainer dir={theme.direction}><Daily email={email}/></TabContainer>
           <TabContainer dir={theme.direction}><Promo email={email}/></TabContainer>
           <TabContainer dir={theme.direction}>Standup</TabContainer>
         </SwipeableViews>

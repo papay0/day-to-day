@@ -10,17 +10,24 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 
 import TasksElement from "./TasksElement";
+import { formatDate } from "../Utils/Date";
 
 const styles = {};
 
 class TasksCard extends Component {
   state = {
-    tasks: this.props.tasks
+    tasks: this.props.tasks,
+    email: this.props.email
   };
 
-  saveTasks = (tasks) => {
+  saveTasks = tasks => {
     this.setState({ tasks: tasks });
-  }
+    this.saveOnDatabase(this.props.id, tasks);
+  };
+
+  saveOnDatabase = (id, tasks) => {
+    this.props.saveTasksDatabase(id, tasks, this.props.day, this.state.email);
+  };
 
   everySubtaskIsDone = subtasks => {
     return subtasks.every(subtask => subtask.done);
@@ -29,7 +36,9 @@ class TasksCard extends Component {
   updateOrderTasks = tasks => {
     const filteredTasks = tasks.map(task => {
       const filteredTask = task;
-      filteredTask.children = filteredTask.children.filter(subtask => subtask.description !== "Add task description here...")
+      filteredTask.children = filteredTask.children.filter(
+        subtask => subtask.description !== "Add task description here..."
+      );
       return filteredTask;
     });
     const tasksNotDone = filteredTasks.filter(
@@ -129,19 +138,21 @@ class TasksCard extends Component {
     }
   };
 
-  deleteTask = (taskId) => {
+  deleteTask = taskId => {
     const tasks = this.state.tasks.filter(task => task.id !== taskId);
     this.saveTasks(tasks);
-  }
+  };
 
-  deleteSubtask = (subtaskId) => {
+  deleteSubtask = subtaskId => {
     const tasks = this.state.tasks.map(task => {
       const filteredTask = task;
-      filteredTask.children = filteredTask.children.filter(subtask => subtask.id !== subtaskId)
+      filteredTask.children = filteredTask.children.filter(
+        subtask => subtask.id !== subtaskId
+      );
       return filteredTask;
     });
     this.saveTasks(tasks);
-  }
+  };
 
   tapElementMenu = (option, taskId) => {
     if (option === "Add subtask") {
@@ -152,7 +163,8 @@ class TasksCard extends Component {
   };
 
   render() {
-    const { classes, day } = this.props;
+    const { classes, day, id } = this.props;
+    console.log("id = " + id);
     const tasks = this.state.tasks;
     const tasksDone = tasks.filter(task => task.done);
     const tasksNotDone = tasks.filter(task => !task.done);
@@ -168,7 +180,7 @@ class TasksCard extends Component {
           }}
         >
           <CardHeader
-            title={day}
+            title={formatDate(day)}
             action={
               <Fab
                 color="primary"
