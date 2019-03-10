@@ -4,8 +4,11 @@ import axios from "axios";
 import Home from "../Home/Home";
 
 export default class LoggedIn extends Component {
-  login = (displayName, email) => {
+  state = {
+    loggedIn: false
+  };
 
+  login = (displayName, email) => {
     axios
       .post(
         "https://us-central1-daytoday-app.cloudfunctions.net/API/login",
@@ -19,16 +22,21 @@ export default class LoggedIn extends Component {
             "Access-Control-Allow-Origin": "*"
           }
         }
-      );
+      )
+      .then(res => {
+        this.setState({ loggedIn: true });
+      });
   };
+
+  componentDidMount() {
+    this.login(this.props.displayName, this.props.email);
+  }
 
   render() {
     const { displayName, email } = this.props;
-    this.login(displayName, email);
+    const loggedIn = this.state.loggedIn;
     return (
-      <div>
-        <Home displayName={displayName} email={email}/>
-      </div>
+      <div>{loggedIn && <Home displayName={displayName} email={email} />}</div>
     );
   }
 }

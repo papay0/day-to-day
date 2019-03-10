@@ -7,7 +7,7 @@ import axios from "axios";
 
 const styles = {};
 
-class Stamdup extends Component {
+class Standup extends Component {
   state = {
     email: this.props.email,
     cards: []
@@ -51,17 +51,15 @@ class Stamdup extends Component {
           tasks={card.tasks.tasks}
           id={card.id}
           email={this.props.email}
-          saveTasksDatabase={(cardId, tasks, date, email) =>
-            this.saveTasksDatabase(cardId, tasks, date, email)
-          }
+          saveTasksDatabase={(cardId, tasks, date, email) => {}}
         />
       );
     });
   }
 }
 
-Stamdup.propTypes = {
+Standup.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(Stamdup);
+export default withStyles(styles)(Standup);
