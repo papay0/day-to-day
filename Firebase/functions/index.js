@@ -30,21 +30,25 @@ app.get("/standup", async (req, res) => {
   const email = req.param("email");
   let userRefId = await firebase.fetchUserRef(email);
   const standup = await firebase.getStandup(userRefId);
-  console.log("1. Standup = " + JSON.stringify(standup));
   res.send(standup);
 });
 
 app.get("/tasks", async (req, res) => {
   const email = req.param("email");
+  const todayOnClient = req.param("todayOnClient");
+  const tomorrowOnClient = req.param("tomorrowOnClient");
   let userRefId = await firebase.fetchUserRef(email);
-  let tasks = await firebase.getTasks(userRefId);
-  if (tasks.length === 0) {
-    const today = firebase.getToday();
-    const tomorrow = firebase.getTomorrow();
-    await firebase.createDefaultTasks(userRefId, today);
-    await firebase.createDefaultTasks(userRefId, tomorrow);
-    tasks = await firebase.getTasks(userRefId);
+  const tasksForToday = await firebase.getTasksForDate(userRefId, todayOnClient);
+  const tasksForTomorrow = await firebase.getTasksForDate(userRefId, tomorrowOnClient);
+  if (tasksForToday.empty) {
+    console.log("I create today => " + todayOnClient)
+    await firebase.createDefaultTasks(userRefId, todayOnClient);
   }
+  if (tasksForTomorrow.empty) {
+    console.log("I create tomorrow")
+    await firebase.createDefaultTasks(userRefId, tomorrowOnClient);
+  }
+  const tasks = await firebase.getTasks(userRefId);
   res.send(tasks);
 });
 

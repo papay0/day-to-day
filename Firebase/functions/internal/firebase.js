@@ -47,8 +47,6 @@ module.exports = {
     const yesterday = this.getYesterday();
     const todayStandup = await this.getTasksForDate(userRefId, today);
     const yesterdayStandup = await this.getTasksForDate(userRefId, yesterday);
-    console.log("2. todayStandup = " + JSON.stringify(todayStandup));
-    console.log("3. yesterdayStandup = " + JSON.stringify(yesterdayStandup));
     const tasks = [];
     todayStandup.docs.forEach(dailyTasks => {
       tasks.push({ id: dailyTasks.id, tasks: dailyTasks.data() });

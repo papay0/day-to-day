@@ -4,6 +4,8 @@ import { withStyles } from "@material-ui/core/styles";
 
 import TasksCard from "../PlatformUI/TasksCard";
 import axios from "axios";
+import { getToday, getTomorrow } from "../Utils/Date";
+import { debounce } from "lodash";
 
 const styles = {};
 
@@ -13,14 +15,15 @@ class Daily extends Component {
     cards: []
   };
 
-  saveTasksDatabase = (cardId, tasks, date, email) => {
+  saveTasksDatabase = debounce((cardId, tasks, date, email) => {
+    console.log("save database")
     const cleanedTasks = this.prepareForSaving(tasks);
     axios
       .post(
         "https://us-central1-daytoday-app.cloudfunctions.net/API/tasks",
         {
           email: email,
-          card: { date: date, tasks: cleanedTasks },
+          card: { date: String(date), tasks: cleanedTasks },
           id: cardId
         },
         {
@@ -33,7 +36,7 @@ class Daily extends Component {
       .then(res => {
         // console.log("res posts = " + JSON.stringify(res))
       });
-  };
+  }, 500);
 
   prepareForSaving(tasksToSave) {
     const tasks = JSON.parse(JSON.stringify(tasksToSave));
@@ -57,12 +60,16 @@ class Daily extends Component {
   }
 
   componentDidMount() {
+    const todayOnClient = getToday();
+    const tomorrowOnClient = getTomorrow();
     axios
       .get(
         "https://us-central1-daytoday-app.cloudfunctions.net/API/tasks",
         {
           params: {
-            email: this.state.email
+            email: this.state.email,
+            todayOnClient: todayOnClient,
+            tomorrowOnClient: tomorrowOnClient
           }
         },
         {
@@ -87,7 +94,7 @@ class Daily extends Component {
   render() {
     const sortedCards = this.prepareUIData(this.state.cards);
     return sortedCards.map(card => {
-      const date = card.tasks.date;
+      const date = parseInt(card.tasks.date);
       return (
         <TasksCard
           day={date}
@@ -95,7 +102,6 @@ class Daily extends Component {
           tasks={card.tasks.tasks}
           id={card.id}
           email={this.props.email}
-          // saveTasksDatabase={this.saveTasksDatabase}
           saveTasksDatabase={(cardId, tasks, date, email) =>
             this.saveTasksDatabase(cardId, tasks, date, email)
           }
@@ -110,70 +116,3 @@ Daily.propTypes = {
 };
 
 export default withStyles(styles)(Daily);
-
-// {
-//   day: "Wednesday 25th February",
-//   tasks: [
-//     {
-//       type: "task",
-//       description: "Create Android Driver app",
-//       done: false,
-//       id: "abcd",
-//       parentId: null,
-//       needsEditFocus: false,
-//       children: [
-//         {
-//           type: "subtask",
-//           description: "Read about Android architecture",
-//           done: true,
-//           id: "yeye",
-//           parentId: "abcd",
-//           needsEditFocus: false,
-//         },
-//         {
-//           type: "subtask",
-//           description: "Read about Kotlin",
-//           done: true,
-//           id: "yeyesfd",
-//           parentId: "abcd",
-//           needsEditFocus: false,
-//         },
-//         {
-//           type: "subtask",
-//           description: "Install IntelliJ",
-//           done: false,
-//           id: "fdssfd",
-//           parentId: "abcd",
-//           needsEditFocus: false,
-//         }
-//       ]
-//     },
-//     {
-//       type: "task",
-//       description: "Known issues",
-//       done: false,
-//       id: "iiuh",
-//       parentId: null,
-//       needsEditFocus: false,
-//       children: [
-//         {
-//           type: "subtask",
-//           description: "Css subtask not well right aligned",
-//           done: false,
-//           id: "lkjlkj",
-//           parentId: "iiuh",
-//           needsEditFocus: false,
-//         }
-//       ]
-//     },
-//     {
-//       type: "task",
-//       description: "Hi",
-//       done: false,
-//       id: "iiuhfssdfsdfsdf",
-//       parentId: null,
-//       children: [],
-//       needsEditFocus: false,
-//     }
-//   ]
-// }

@@ -21,9 +21,7 @@ class TasksCard extends Component {
   };
 
   saveTasks = tasks => {
-    console.log("IN SAVE TASKS, tasks = " + JSON.stringify(tasks))
     this.setState({ tasks: tasks });
-    // console.log("1. " + JSON.stringify(tasks));
     this.saveOnDatabase(this.props.id, tasks);
   };
 
