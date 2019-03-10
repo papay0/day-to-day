@@ -10,6 +10,7 @@ import Typography from "@material-ui/core/Typography";
 
 import Daily from "../Daily/Daily";
 import Promo from "../Promo/Promo";
+import Standup from "../Standup/Standup";
 
 function TabContainer({ children, dir }) {
   return (
@@ -21,20 +22,19 @@ function TabContainer({ children, dir }) {
 
 TabContainer.propTypes = {
   children: PropTypes.node.isRequired,
-  dir: PropTypes.string.isRequired,
+  dir: PropTypes.string.isRequired
 };
 
 const styles = theme => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    width: '100%',
-  },
+    width: "100%"
+  }
 });
 
 class Home extends Component {
-
   state = {
-    value: parseInt(localStorage.getItem("tabIndex")) || 0,
+    value: parseInt(localStorage.getItem("tabIndex")) || 0
   };
 
   handleChange = (event, value) => {
@@ -57,8 +57,7 @@ class Home extends Component {
             onChange={this.handleChange}
             indicatorColor="primary"
             textColor="primary"
-            variant={window.innerWidth > 1000 ? 'fullWidth':'scrollable'}
-
+            variant={window.innerWidth > 1000 ? "fullWidth" : "scrollable"}
             scrollButtons="auto"
           >
             <Tab label="Daily" value={0} />
@@ -71,9 +70,15 @@ class Home extends Component {
           index={this.state.value}
           onChangeIndex={this.handleChangeIndex}
         >
-          <TabContainer dir={theme.direction}><Daily email={email}/></TabContainer>
-          <TabContainer dir={theme.direction}><Promo email={email}/></TabContainer>
-          <TabContainer dir={theme.direction}>Standup</TabContainer>
+          <TabContainer dir={theme.direction}>
+            <Daily email={email} />
+          </TabContainer>
+          <TabContainer dir={theme.direction}>
+            <Promo email={email} />
+          </TabContainer>
+          <TabContainer dir={theme.direction}>
+            <Standup email={email} />
+          </TabContainer>
         </SwipeableViews>
       </div>
     );

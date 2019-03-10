@@ -42,6 +42,22 @@ module.exports = {
       .doc(ref)
       .get();
   },
+  getStandup: async function(userRefId) {
+    const today = this.getToday();
+    const yesterday = this.getYesterday();
+    const todayStandup = await this.getTasksForDate(userRefId, today);
+    const yesterdayStandup = await this.getTasksForDate(userRefId, yesterday);
+    console.log("2. todayStandup = " + JSON.stringify(todayStandup));
+    console.log("3. yesterdayStandup = " + JSON.stringify(yesterdayStandup));
+    const tasks = [];
+    todayStandup.docs.forEach(dailyTasks => {
+      tasks.push({ id: dailyTasks.id, tasks: dailyTasks.data() });
+    });
+    yesterdayStandup.docs.forEach(dailyTasks => {
+      tasks.push({ id: dailyTasks.id, tasks: dailyTasks.data() });
+    });
+    return tasks;
+  },
   getTasks: async function(userRefId) {
     const tasksObj = await db
       .collection("tasks")
@@ -59,11 +75,10 @@ module.exports = {
       .collection("tasks")
       .doc(refUserId)
       .collection("tasks")
-      .where("date", "==", date);
+      .where("date", "==", date)
+      .get();
   },
   createDefaultTasks: async function(refUserId, date) {
-    console.log("refUserId = " + refUserId);
-    console.log("date = " + date);
     await db
       .collection("tasks")
       .doc(refUserId)
@@ -101,12 +116,18 @@ module.exports = {
       .update(tasks);
   },
   getToday: function() {
-    return new Date().getTime();
+    return new Date(new Date().setHours(0, 0, 0, 0)).getTime();
   },
   getTomorrow: function() {
     const today = new Date();
     const tomorrow = new Date();
     tomorrow.setDate(today.getDate() + 1);
-    return tomorrow.getTime();
+    return new Date(tomorrow.setHours(0, 0, 0, 0)).getTime();
+  },
+  getYesterday: function() {
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+    return new Date(yesterday.setHours(0, 0, 0, 0)).getTime();
   }
 };

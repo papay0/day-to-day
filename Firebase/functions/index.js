@@ -1,4 +1,4 @@
-const functions = require('firebase-functions');
+const functions = require("firebase-functions");
 const express = require("express");
 const cors = require("cors");
 
@@ -21,24 +21,29 @@ app.post("/promo", async (req, res) => {
 });
 
 app.get("/promo", async (req, res) => {
-  const email = req.param('email');
+  const email = req.param("email");
   const content = await firebase.getPromoContent(email);
   res.send(content.data());
 });
 
+app.get("/standup", async (req, res) => {
+  const email = req.param("email");
+  let userRefId = await firebase.fetchUserRef(email);
+  const standup = await firebase.getStandup(userRefId);
+  console.log("1. Standup = " + JSON.stringify(standup));
+  res.send(standup);
+});
+
 app.get("/tasks", async (req, res) => {
-  const email = req.param('email');
+  const email = req.param("email");
   let userRefId = await firebase.fetchUserRef(email);
   let tasks = await firebase.getTasks(userRefId);
-  console.log("1. tasks = " + JSON.stringify(tasks));
   if (tasks.length === 0) {
     const today = firebase.getToday();
-    console.log("today = " + today);
     const tomorrow = firebase.getTomorrow();
     await firebase.createDefaultTasks(userRefId, today);
     await firebase.createDefaultTasks(userRefId, tomorrow);
     tasks = await firebase.getTasks(userRefId);
-    console.log("2. tasks = " + JSON.stringify(tasks));
   }
   res.send(tasks);
 });

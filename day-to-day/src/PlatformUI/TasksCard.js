@@ -79,11 +79,6 @@ class TasksCard extends Component {
     this.saveTasks(this.updateOrderTasks(tasks));
   };
 
-  componentWillReceiveProps(nextProps) {
-    console.log("1. nextProps " + JSON.stringify(nextProps));
-  }
-
-
   handleInputChange = (taskId, description) => {
     const tasks = this.state.tasks.slice();
 
