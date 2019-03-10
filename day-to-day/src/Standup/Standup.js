@@ -4,6 +4,7 @@ import { withStyles } from "@material-ui/core/styles";
 
 import TasksCard from "../PlatformUI/TasksCard";
 import axios from "axios";
+import { getToday, getYesterday } from "../Utils/Date";
 
 const styles = {};
 
@@ -13,12 +14,16 @@ class Standup extends Component {
     cards: []
   };
   componentDidMount() {
+    const todayOnClient = getToday();
+    const yesterdayOnClient = getYesterday();
     axios
       .get(
         "https://us-central1-daytoday-app.cloudfunctions.net/API/standup",
         {
           params: {
-            email: this.state.email
+            email: this.state.email,
+            todayOnClient: todayOnClient,
+            yesterdayOnClient: yesterdayOnClient
           }
         },
         {
@@ -43,7 +48,7 @@ class Standup extends Component {
   render() {
     const sortedCards = this.prepareUIData(this.state.cards);
     return sortedCards.map(card => {
-      const date = card.tasks.date;
+      const date = parseInt(card.tasks.date);
       return (
         <TasksCard
           day={date}

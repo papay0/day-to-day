@@ -42,11 +42,9 @@ module.exports = {
       .doc(ref)
       .get();
   },
-  getStandup: async function(userRefId) {
-    const today = this.getToday();
-    const yesterday = this.getYesterday();
-    const todayStandup = await this.getTasksForDate(userRefId, today);
-    const yesterdayStandup = await this.getTasksForDate(userRefId, yesterday);
+  getStandup: async function(userRefId, todayOnClient, yesterdayOnClient) {
+    const todayStandup = await this.getTasksForDate(userRefId, todayOnClient);
+    const yesterdayStandup = await this.getTasksForDate(userRefId, yesterdayOnClient);
     const tasks = [];
     todayStandup.docs.forEach(dailyTasks => {
       tasks.push({ id: dailyTasks.id, tasks: dailyTasks.data() });

@@ -28,8 +28,10 @@ app.get("/promo", async (req, res) => {
 
 app.get("/standup", async (req, res) => {
   const email = req.param("email");
+  const todayOnClient = req.param("todayOnClient");
+  const yesterdayOnClient = req.param("yesterdayOnClient");
   let userRefId = await firebase.fetchUserRef(email);
-  const standup = await firebase.getStandup(userRefId);
+  const standup = await firebase.getStandup(userRefId, todayOnClient, yesterdayOnClient);
   res.send(standup);
 });
 
